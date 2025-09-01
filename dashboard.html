@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akumasi Media - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --dark-bg: #1a252f;
+            --light-bg: #ecf0f1;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-color) 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            min-height: 95vh;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary-color), var(--dark-bg));
+            border-radius: 20px 0 0 20px;
+            min-height: 95vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-logo {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .brand-logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .brand-logo h3 {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            margin: 8px 20px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .main-content {
+            padding: 30px;
+            background: white;
+            border-radius: 0 20px 20px 0;
+            min-height: 95vh;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--success-color));
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--secondary-color), var(--success-color));
+        }
+
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--secondary-color);
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--secondary-color), var(--success-color));
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-custom::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn-custom:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-container {
+            margin-top: 15px;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(45deg, transparent 35%, rgba(255,255,255,0.2) 35%, rgba(255,255,255,0.2) 65%, transparent 65%);
+            background-size: 10px 10px;
+            animation: move 1s linear infinite;
+        }
+
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 10px 0; }
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--success-color));
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 10px;
+            padding: 15px 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container row g-0">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar">
+            <div class="sidebar-content">
+                <div class="brand-logo">
+                    <img src="assets/jame1.jpeg" alt="James Akuta">
+                    <h3>Akumasi Media</h3>
+                    <p class="text-white-50 mb-0">Admin Dashboard</p>
+                </div>
+                <nav class="nav-menu">
+                    <div class="nav-item">
+                        <a href="#" class="nav-link active" data-section="overview">
+                            <i class="bi bi-house"></i>
+                            Overview
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link" data-section="music">
+                            <i class="bi bi-music-note-beamed"></i>
+                            Music Library
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link" data-section="documents">
+                            <i class="bi bi-file-earmark-text"></i>
+                            Documents
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link" data-section="streaming">
+                            <i class="bi bi-broadcast"></i>
+                            Streaming Links
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link" data-section="settings">
+                            <i class="bi bi-gear"></i>
+                            Settings
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 main-content">
+            <!-- Overview Section -->
+            <div id="overview-section" class="content-section">
+                <div class="page-header">
+                    <h1><i class="bi bi-speedometer2 me-2"></i>Dashboard Overview</h1>
+                    <p class="mb-0">Manage your music, documents, and streaming content</p>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <div class="stats-icon text-primary">
+                                <i class="bi bi-music-note-list"></i>
+                            </div>
+                            <h3 id="music-count">6</h3>
+                            <p class="text-muted mb-0">Audio Files</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <div class="stats-icon text-success">
+                                <i class="bi bi-file-earmark"></i>
+                            </div>
+                            <h3 id="doc-count">3</h3>
+                            <p class="text-muted mb-0">Documents</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <div class="stats-icon text-info">
+                                <i class="bi bi-link-45deg"></i>
+                            </div>
+                            <h3 id="link-count">0</h3>
+                            <p class="text-muted mb-0">Streaming Links</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-upload me-2"></i>Quick Upload</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-custom w-100 mb-2" onclick="showSection('music')">
+                                <i class="bi bi-music-note me-2"></i>Upload Music
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-custom w-100 mb-2" onclick="showSection('documents')">
+                                <i class="bi bi-file-earmark me-2"></i>Upload Documents
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-custom w-100 mb-2" onclick="showSection('streaming')">
+                                <i class="bi bi-broadcast me-2"></i>Add Streaming Link
+                            </button>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music Section -->
+            <div id="music-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1><i class="bi bi-music-note-beamed me-2"></i>Music Library Management</h1>
+                    <p class="mb-0">Upload and manage your audio files</p>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-cloud-upload me-2"></i>Upload Audio Files</h4>
+                    <div class="upload-area" id="music-upload-area">
+                        <div class="upload-icon">
+                            <i class="bi bi-music-note-beamed"></i>
+                        </div>
+                        <h5>Drag & Drop Audio Files Here</h5>
+                        <p class="text-muted">Supported formats: MP3, WAV, M4A, OGG</p>
+                        <input type="file" id="music-file-input" multiple accept="audio/*" class="d-none">
+                        <button class="btn btn-custom" onclick="document.getElementById('music-file-input').click()">
+                            <i class="bi bi-folder me-2"></i>Browse Files
+                        </button>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="song-title" class="form-label">Song Title</label>
+                            <input type="text" class="form-control" id="song-title" placeholder="Enter song title">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="song-artist" class="form-label">Artist</label>
+                            <input type="text" class="form-control" id="song-artist" placeholder="Enter artist name" value="James Akuta">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="song-genre" class="form-label">Genre</label>
+                            <select class="form-control" id="song-genre">
+                                <option value="Afrobeat">Afrobeat</option>
+                                <option value="Hip-Hop">Hip-Hop</option>
+                                <option value="R&B">R&B</option>
+                                <option value="Gospel">Gospel</option>
+                                <option value="Jazz">Jazz</option>
+                                <option value="Pop">Pop</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="song-duration" class="form-label">Duration (optional)</label>
+                            <input type="text" class="form-control" id="song-duration" placeholder="e.g., 3:45">
+                        </div>
+                    </div>
+
+                    <div id="music-progress-container" class="progress-container hidden">
+                        <div class="progress">
+                            <div class="progress-bar" id="music-progress-bar"></div>
+                        </div>
+                        <p id="music-progress-text" class="mt-2 text-center"></p>
+                    </div>
+
+                    <button class="btn btn-custom mt-3" id="upload-music-btn" onclick="uploadMusic()">
+                        <i class="bi bi-upload me-2"></i>Upload Music
+                    </button>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-list-ul me-2"></i>Current Music Library</h4>
+                    <div id="music-file-list" class="file-list">
+                        <!-- Music files will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Section -->
+            <div id="documents-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1><i class="bi bi-file-earmark-text me-2"></i>Document Management</h1>
+                    <p class="mb-0">Upload and manage your documents</p>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-cloud-upload me-2"></i>Upload Documents</h4>
+                    <div class="upload-area" id="doc-upload-area">
+                        <div class="upload-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <h5>Drag & Drop Documents Here</h5>
+                        <p class="text-muted">Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX</p>
+                        <input type="file" id="doc-file-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" class="d-none">
+                        <button class="btn btn-custom" onclick="document.getElementById('doc-file-input').click()">
+                            <i class="bi bi-folder me-2"></i>Browse Files
+                        </button>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="doc-title" class="form-label">Document Title</label>
+                            <input type="text" class="form-control" id="doc-title" placeholder="Enter document title">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="doc-category" class="form-label">Category</label>
+                            <select class="form-control" id="doc-category">
+                                <option value="Reports">Reports</option>
+                                <option value="Presentations">Presentations</option>
+                                <option value="Contracts">Contracts</option>
+                                <option value="Invoices">Invoices</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="doc-progress-container" class="progress-container hidden">
+                        <div class="progress">
+                            <div class="progress-bar" id="doc-progress-bar"></div>
+                        </div>
+                        <p id="doc-progress-text" class="mt-2 text-center"></p>
+                    </div>
+
+                    <button class="btn btn-custom mt-3" id="upload-doc-btn" onclick="uploadDocument()">
+                        <i class="bi bi-upload me-2"></i>Upload Document
+                    </button>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-list-ul me-2"></i>Current Documents</h4>
+                    <div id="doc-file-list" class="file-list">
+                        <!-- Document files will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Streaming Section -->
+            <div id="streaming-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1><i class="bi bi-broadcast me-2"></i>Streaming Links Management</h1>
+                    <p class="mb-0">Add and manage your streaming platform links</p>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-link-45deg me-2"></i>Add Streaming Link</h4>
+                    <form id="streaming-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="stream-title" class="form-label">Song/Album Title</label>
+                                <input type="text" class="form-control" id="stream-title" placeholder="Enter title" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="stream-platform" class="form-label">Platform</label>
+                                <select class="form-control" id="stream-platform" required>
+                                    <option value="">Select Platform</option>
+                                    <option value="Spotify">Spotify</option>
+                                    <option value="Apple Music">Apple Music</option>
+                                    <option value="YouTube Music">YouTube Music</option>
+                                    <option value="SoundCloud">SoundCloud</option>
+                                    <option value="Audiomack">Audiomack</option>
+                                    <option value="Boomplay">Boomplay</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label for="stream-url" class="form-label">Streaming URL</label>
+                                <input type="url" class="form-control" id="stream-url" placeholder="https://..." required>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label for="stream-description" class="form-label">Description (optional)</label>
+                                <textarea class="form-control" id="stream-description" rows="3" placeholder="Add a description..."></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-custom mt-3">
+                            <i class="bi bi-plus-circle me-2"></i>Add Streaming Link
+                        </button>
+                    </form>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-list-ul me-2"></i>Current Streaming Links</h4>
+                    <div id="streaming-links-list" class="file-list">
+                        <!-- Streaming links will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings-section" class="content-section hidden">
+                <div class="page-header">
+                    <h1><i class="bi bi-gear me-2"></i>Settings</h1>
+                    <p class="mb-0">Configure your dashboard preferences</p>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-person-circle me-2"></i>Profile Settings</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="artist-name" class="form-label">Artist Name</label>
+                            <input type="text" class="form-control" id="artist-name" value="James Akuta">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="brand-name" class="form-label">Brand Name</label>
+                            <input type="text" class="form-control" id="brand-name" value="Akumasi Media">
+                        </div>
+                    </div>
+                    <button class="btn btn-custom mt-3" onclick="saveSettings()">
+                        <i class="bi bi-check-circle me-2"></i>Save Settings
+                    </button>
+                </div>
+
+                <div class="upload-section">
+                    <h4><i class="bi bi-download me-2"></i>Export Data</h4>
+                    <p>Export your data for backup or migration purposes.</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-primary w-100" onclick="exportMusicData()">
+                                <i class="bi bi-music-note me-2"></i>Export Music Data
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-success w-100" onclick="exportDocumentData()">
+                                <i class="bi bi-file-earmark me-2"></i>Export Document Data
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-info w-100" onclick="exportStreamingData()">
+                                <i class="bi bi-broadcast me-2"></i>Export Streaming Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="success-toast" class="toast" role="alert">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle me-2"></i>
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toast-message">
+                Operation completed successfully!
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Data storage (in production, this would be connected to a backend)
+        let musicLibrary = JSON.parse(localStorage.getItem('musicLibrary')) || [
+            {title: "Bo sei", artist: "James Akuta", genre: "Afrobeat", src: "assets/Bo sei.mp3"},
+            {title: "Creek side", artist: "James Akuta", genre: "Afrobeat", src: "assets/creek Side Luv.mp3"},
+            {title: "Dancing alone ft KDB", artist: "James Akuta", genre: "Afrobeat", src: "assets/Dancing.mp3"},
+            {title: "Knew what", artist: "James Akuta", genre: "Afrobeat", src: "assets/knew What.mp3"},
+            {title: "Not fair", artist: "James Akuta", genre: "Afrobeat", src: "assets/Not Fair.mp3"},
+            {title: "Wede", artist: "James Akuta", genre: "Afrobeat", src: "assets/wede.mp3"}
+        ];
+
+        let documentLibrary = JSON.parse(localStorage.getItem('documentLibrary')) || [
+            {title: "My PDF File", category: "Reports", src: "documents/project.pdf", type: "PDF"},
+            {title: "Report (Word)", category: "Reports", src: "documents/report.docx", type: "Word"},
+            {title: "Data Sheet (Excel)", category: "Other", src: "documents/data.xlsx", type: "Excel"}
+        ];
+
+        let streamingLinks = JSON.parse(localStorage.getItem('streamingLinks')) || [];
+
+        // Navigation functionality
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            document.getElementById(sectionName + '-section').classList.add('fade-in');
+            
+            // Add active class to corresponding nav link
+            document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+            
+            // Load section-specific data
+            if (sectionName === 'music') {
+                displayMusicLibrary();
+            } else if (sectionName === 'documents') {
+                displayDocumentLibrary();
+            } else if (sectionName === 'streaming') {
+                displayStreamingLinks();
+            }
+        }
+
+        // Event listeners for navigation
+        document.querySelectorAll('[data-section]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSection(link.dataset.section);
+            });
+        });
+
+        // File upload handling
+        function setupFileUpload(inputId, areaId, callback) {
+            const input = document.getElementById(inputId);
+            const area = document.getElementById(areaId);
+
+            input.addEventListener('change', callback);
+
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                input.files = e.dataTransfer.files;
+                callback();
+            });
+        }
+
+        // Music upload functionality
+        function uploadMusic() {
+            const fileInput = document.getElementById('music-file-input');
+            const title = document.getElementById('song-title').value;
+            const artist = document.getElementById('song-artist').value || 'James Akuta';
+            const genre = document.getElementById('song-genre').value;
+            
+            if (!fileInput.files.length) {
+                showToast('Please select an audio file', 'error');
+                return;
+            }
+
+            if (!title) {
+                showToast('Please enter a song title', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            simulateUpload('music', () => {
+                // In a real application, you would upload the file to a server
+                // For demo purposes, we'll create a URL for the file
+                const fileURL = URL.createObjectURL(file);
+                
+                const newSong = {
+                    title: title,
+                    artist: artist,
+                    genre: genre,
+                    src: fileURL,
+                    uploadDate: new Date().toISOString()
+                };
+
+                musicLibrary.push(newSong);
+                localStorage.setItem('musicLibrary', JSON.stringify(musicLibrary));
+                
+                // Clear form
+                document.getElementById('song-title').value = '';
+                document.getElementById('song-artist').value = 'James Akuta';
+                fileInput.value = '';
+                
+                displayMusicLibrary();
+                updateStats();
+                showToast('Music uploaded successfully!');
+            });
+        }
+
+        // Document upload functionality
+        function uploadDocument() {
+            const fileInput = document.getElementById('doc-file-input');
+            const title = document.getElementById('doc-title').value;
+            const category = document.getElementById('doc-category').value;
+            
+            if (!fileInput.files.length) {
+                showToast('Please select a document', 'error');
+                return;
+            }
+
+            if (!title) {
+                showToast('Please enter a document title', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            simulateUpload('doc', () => {
+                const fileURL = URL.createObjectURL(file);
+                const fileType = file.name.split('.').pop().toUpperCase();
+                
+                const newDoc = {
+                    title: title,
+                    category: category,
+                    src: fileURL,
+                    type: fileType,
+                    uploadDate: new Date().toISOString(),
+                    size: formatFileSize(file.size)
+                };
+
+                documentLibrary.push(newDoc);
+                localStorage.setItem('documentLibrary', JSON.stringify(documentLibrary));
+                
+                // Clear form
+                document.getElementById('doc-title').value = '';
+                fileInput.value = '';
+                
+                displayDocumentLibrary();
+                updateStats();
+                showToast('Document uploaded successfully!');
+            });
+        }
+
+        // Streaming link functionality
+        document.getElementById('streaming-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('stream-title').value;
+            const platform = document.getElementById('stream-platform').value;
+            const url = document.getElementById('stream-url').value;
+            const description = document.getElementById('stream-description').value;
+
+            const newLink = {
+                id: Date.now(),
+                title: title,
+                platform: platform,
+                url: url,
+                description: description,
+                addedDate: new Date().toISOString()
+            };
+
+            streamingLinks.push(newLink);
+            localStorage.setItem('streamingLinks', JSON.stringify(streamingLinks));
+            
+            // Clear form
+            e.target.reset();
+            
+            displayStreamingLinks();
+            updateStats();
+            showToast('Streaming link added successfully!');
+        });
+
+        // Display functions
+        function displayMusicLibrary() {
+            const container = document.getElementById('music-file-list');
+            container.innerHTML = '';
+
+            if (musicLibrary.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No music files uploaded yet.</p>';
+                return;
+            }
+
+            musicLibrary.forEach((song, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${song.title}</strong><br>
+                        <small class="text-muted">${song.artist} • ${song.genre}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="playPreview('${song.src}')">
+                            <i class="bi bi-play"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteMusicItem(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function displayDocumentLibrary() {
+            const container = document.getElementById('doc-file-list');
+            container.innerHTML = '';
+
+            if (documentLibrary.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No documents uploaded yet.</p>';
+                return;
+            }
+
+            documentLibrary.forEach((doc, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${doc.title}</strong><br>
+                        <small class="text-muted">${doc.type} • ${doc.category} ${doc.size ? '• ' + doc.size : ''}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="viewDocument('${doc.src}')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-success me-2" onclick="downloadDocument('${doc.src}', '${doc.title}')">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteDocumentItem(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function displayStreamingLinks() {
+            const container = document.getElementById('streaming-links-list');
+            container.innerHTML = '';
+
+            if (streamingLinks.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No streaming links added yet.</p>';
+                return;
+            }
+
+            streamingLinks.forEach((link, index) => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${link.title}</strong><br>
+                        <small class="text-muted">${link.platform} ${link.description ? '• ' + link.description : ''}</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="openStreamingLink('${link.url}')">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteStreamingLink(${index})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Utility functions
+        function simulateUpload(type, callback) {
+            const progressContainer = document.getElementById(type + '-progress-container');
+            const progressBar = document.getElementById(type + '-progress-bar');
+            const progressText = document.getElementById(type + '-progress-text');
+            const uploadBtn = document.getElementById('upload-' + type + '-btn');
+
+            progressContainer.classList.remove('hidden');
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Uploading...';
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '% uploaded';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.classList.add('hidden');
+                        uploadBtn.disabled = false;
+                        uploadBtn.innerHTML = '<i class="bi bi-upload me-2"></i>Upload ' + (type === 'music' ? 'Music' : 'Document');
+                        callback();
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('success-toast');
+            const toastMessage = document.getElementById('toast-message');
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                toast.querySelector('.toast-header').className = 'toast-header bg-danger text-white';
+            } else {
+                toast.querySelector('.toast-header').className = 'toast-header bg-success text-white';
+            }
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        function updateStats() {
+            document.getElementById('music-count').textContent = musicLibrary.length;
+            document.getElementById('doc-count').textContent = documentLibrary.length;
+            document.getElementById('link-count').textContent = streamingLinks.length;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Action functions
+        function playPreview(src) {
+            const audio = new Audio(src);
+            audio.volume = 0.5;
+            audio.play();
+            showToast('Playing preview...', 'info');
+        }
+
+        function viewDocument(src) {
+            window.open(src, '_blank');
+        }
+
+        function downloadDocument(src, title) {
+            const a = document.createElement('a');
+            a.href = src;
+            a.download = title;
+            a.click();
+            showToast('Download started...');
+        }
+
+        function openStreamingLink(url) {
+            window.open(url, '_blank');
+        }
+
+        function deleteMusicItem(index) {
+            if (confirm('Are you sure you want to delete this music file?')) {
+                musicLibrary.splice(index, 1);
+                localStorage.setItem('musicLibrary', JSON.stringify(musicLibrary));
+                displayMusicLibrary();
+                updateStats();
+                showToast('Music file deleted successfully!');
+            }
+        }
+
+        function deleteDocumentItem(index) {
+            if (confirm('Are you sure you want to delete this document?')) {
+                documentLibrary.splice(index, 1);
+                localStorage.setItem('documentLibrary', JSON.stringify(documentLibrary));
+                displayDocumentLibrary();
+                updateStats();
+                showToast('Document deleted successfully!');
+            }
+        }
+
+        function deleteStreamingLink(index) {
+            if (confirm('Are you sure you want to delete this streaming link?')) {
+                streamingLinks.splice(index, 1);
+                localStorage.setItem('streamingLinks', JSON.stringify(streamingLinks));
+                displayStreamingLinks();
+                updateStats();
+                showToast('Streaming link deleted successfully!');
+            }
+        }
+
+        function saveSettings() {
+            const artistName = document.getElementById('artist-name').value;
+            const brandName = document.getElementById('brand-name').value;
+            
+            localStorage.setItem('artistName', artistName);
+            localStorage.setItem('brandName', brandName);
+            
+            showToast('Settings saved successfully!');
+        }
+
+        function exportMusicData() {
+            const dataStr = JSON.stringify(musicLibrary, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'music_library_export.json';
+            a.click();
+            showToast('Music data exported successfully!');
+        }
+
+        function exportDocumentData() {
+            const dataStr = JSON.stringify(documentLibrary, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'document_library_export.json';
+            a.click();
+            showToast('Document data exported successfully!');
+        }
+
+        function exportStreamingData() {
+            const dataStr = JSON.stringify(streamingLinks, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'streaming_links_export.json';
+            a.click();
+            showToast('Streaming data exported successfully!');
+        }
+
+        // Code generation functions
+        function generateMusicCode() {
+            const code = `const SONGS = ${JSON.stringify(musicLibrary, null, 2)};`;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Music library code copied to clipboard!');
+            });
+        }
+
+        function generateDocumentCode() {
+            let htmlCode = '';
+            documentLibrary.forEach(doc => {
+                htmlCode += `
+    <div class="doc-card">
+      <h3>${doc.title}</h3>
+      <a href="${doc.src}" target="_blank" class="view-btn">View</a>
+      <a href="${doc.src}" download class="download-btn">Download</a>
+    </div>`;
+            });
+            
+            navigator.clipboard.writeText(htmlCode).then(() => {
+                showToast('Document library HTML copied to clipboard!');
+            });
+        }
+
+        // Initialize file upload handlers
+        setupFileUpload('music-file-input', 'music-upload-area', () => {
+            const file = document.getElementById('music-file-input').files[0];
+            if (file) {
+                // Auto-fill title from filename
+                const filename = file.name.replace(/\.[^/.]+$/, "");
+                document.getElementById('song-title').value = filename;
+            }
+        });
+
+        setupFileUpload('doc-file-input', 'doc-upload-area', () => {
+            const file = document.getElementById('doc-file-input').files[0];
+            if (file) {
+                // Auto-fill title from filename
+                const filename = file.name.replace(/\.[^/.]+$/, "");
+                document.getElementById('doc-title').value = filename;
+            }
+        });
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStats();
+            displayMusicLibrary();
+            
+            // Load saved settings
+            const savedArtist = localStorage.getItem('artistName');
+            const savedBrand = localStorage.getItem('brandName');
+            
+            if (savedArtist) document.getElementById('artist-name').value = savedArtist;
+            if (savedBrand) document.getElementById('brand-name').value = savedBrand;
+        });
+
+        // Add generate code buttons to settings
+        document.addEventListener('DOMContentLoaded', () => {
+            const settingsSection = document.getElementById('settings-section');
+            const codeGenSection = document.createElement('div');
+            codeGenSection.className = 'upload-section';
+            codeGenSection.innerHTML = `
+                <h4><i class="bi bi-code-slash me-2"></i>Generate Code</h4>
+                <p>Generate code snippets to integrate your data into your website.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-primary w-100 mb-2" onclick="generateMusicCode()">
+                            <i class="bi bi-music-note me-2"></i>Copy Music Library JS
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-outline-success w-100 mb-2" onclick="generateDocumentCode()">
+                            <i class="bi bi-file-earmark me-2"></i>Copy Document Library HTML
+                        </button>
+                    </div>
+                </div>
+            `;
+            settingsSection.appendChild(codeGenSection);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

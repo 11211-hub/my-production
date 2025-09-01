@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access - Akumasi Media</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .login-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid #667eea;
+            padding: 10px;
+        }
+
+        .login-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #7f8c8d;
+            margin-bottom: 40px;
+        }
+
+        .form-control {
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            z-index: 10;
+        }
+
+        .input-group .form-control {
+            padding-left: 50px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn-login:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .loading-spinner {
+            display: none;
+        }
+
+        .btn-login.loading {
+            pointer-events: none;
+        }
+
+        .btn-login.loading .loading-text {
+            display: none;
+        }
+
+        .btn-login.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        .security-note {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .attempts-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-content">
+            <img src="assets/small.png" alt="Logo" class="login-logo">
+            <h2 class="login-title">Admin Access</h2>
+            <p class="login-subtitle">Akumasi Media Dashboard</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="bi bi-person-circle"></i>
+                    <input type="text" class="form-control" id="username" placeholder="Username" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="bi bi-lock-fill"></i>
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="btn btn-login" id="loginBtn">
+                    <span class="loading-text">
+                        <i class="bi bi-shield-check me-2"></i>Access Dashboard
+                    </span>
+                    <span class="loading-spinner">
+                        <i class="bi bi-hourglass-split me-2"></i>Verifying...
+                    </span>
+                </button>
+
+                <div class="error-message" id="errorMessage">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <span id="errorText">Invalid credentials. Please try again.</span>
+                </div>
+
+                <div class="attempts-warning" id="attemptsWarning">
+                    <i class="bi bi-shield-exclamation me-2"></i>
+                    Multiple failed attempts detected. Access temporarily restricted.
+                </div>
+            </form>
+
+            <div class="security-note">
+                <i class="bi bi-info-circle me-2"></i>
+                This is a secure admin area. Only authorized personnel should access this page.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Admin credentials (in production, this should be handled server-side)
+        const ADMIN_CREDENTIALS = {
+            username: 'akumasi_admin',
+            password: 'JamesAkuta2024!'
+        };
+
+        // Alternative credentials
+        const ALT_CREDENTIALS = {
+            username: 'james',
+            password: 'akumasi123'
+        };
+
+        let failedAttempts = parseInt(localStorage.getItem('adminFailedAttempts')) || 0;
+        let lastAttemptTime = parseInt(localStorage.getItem('lastAttemptTime')) || 0;
+
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const attemptsWarning = document.getElementById('attemptsWarning');
+
+        // Check if user is temporarily blocked
+        function isBlocked() {
+            const now = Date.now();
+            const blockDuration = 15 * 60 * 1000; // 15 minutes
+            return failedAttempts >= 3 && (now - lastAttemptTime) < blockDuration;
+        }
+
+        // Show blocked message
+        function showBlocked() {
+            const remainingTime = Math.ceil((15 * 60 * 1000 - (Date.now() - lastAttemptTime)) / 1000 / 60);
+            attemptsWarning.style.display = 'block';
+            attemptsWarning.innerHTML = `
+                <i class="bi bi-shield-exclamation me-2"></i>
+                Too many failed attempts. Please try again in ${remainingTime} minutes.
+            `;
+        }
+
+        // Handle form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Check if blocked
+            if (isBlocked()) {
+                showBlocked();
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Show loading state
+            loginBtn.classList.add('loading');
+            errorMessage.style.display = 'none';
+            attemptsWarning.style.display = 'none';
+
+            // Simulate server delay for security
+            setTimeout(() => {
+                // Check credentials
+                const isValidAdmin = username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password;
+                const isValidAlt = username === ALT_CREDENTIALS.username && password === ALT_CREDENTIALS.password;
+
+                if (isValidAdmin || isValidAlt) {
+                    // Success - clear failed attempts
+                    localStorage.removeItem('adminFailedAttempts');
+                    localStorage.removeItem('lastAttemptTime');
+                    
+                    // Set admin session
+                    localStorage.setItem('adminAuthenticated', 'true');
+                    localStorage.setItem('adminSessionTime', Date.now().toString());
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Failed login
+                    failedAttempts++;
+                    lastAttemptTime = Date.now();
+                    
+                    localStorage.setItem('adminFailedAttempts', failedAttempts.toString());
+                    localStorage.setItem('lastAttemptTime', lastAttemptTime.toString());
+
+                    loginBtn.classList.remove('loading');
+                    
+                    if (failedAttempts >= 3) {
+                        showBlocked();
+                    } else {
+                        errorMessage.style.display = 'block';
+                        document.getElementById('errorText').textContent = 
+                            `Invalid credentials. ${3 - failedAttempts} attempts remaining.`;
+                    }
+                    
+                    // Clear form
+                    document.getElementById('password').value = '';
+                }
+            }, 1500);
+        });
+
+        // Check if already authenticated
+        window.addEventListener('load', () => {
+            const isAuthenticated = localStorage.getItem('adminAuthenticated');
+            const sessionTime = parseInt(localStorage.getItem('adminSessionTime')) || 0;
+            const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours
+            
+            if (isAuthenticated && (Date.now() - sessionTime) < sessionDuration) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        // Show attempts warning if blocked
+        if (isBlocked()) {
+            showBlocked();
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

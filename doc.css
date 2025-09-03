@@ -1,5 +1,3 @@
-
-
 /**
 * Template Name: iPortfolio
 * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
@@ -19,28 +17,27 @@
   --nav-font: "Poppins",  sans-serif;
 }
 
-/* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
+/* Global Colors */
 :root { 
-  --background-color: #ffffff; /* Background color for the entire website, including individual sections */
-  --default-color: #272829; /* Default color used for the majority of the text content across the entire website */
-  --heading-color: #050d18; /* Color for headings, subheadings and title throughout the website */
-  --accent-color: #149ddd; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
-  --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
-  --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
+  --background-color: #ffffff;
+  --default-color: #272829;
+  --heading-color: #050d18;
+  --accent-color: #149ddd;
+  --surface-color: #ffffff;
+  --contrast-color: #ffffff;
 }
 
-/* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
+/* Nav Menu Colors */
 :root {
-  --nav-color: #a8a9b4;  /* The default color of the main navmenu links */
-  --nav-hover-color: #ffffff; /* Applied to main navmenu links when they are hovered over or active */
-  --nav-mobile-background-color: #040b14; /* Used as the background color for mobile navigation menu */
-  --nav-dropdown-background-color: #040b14; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
-  --nav-dropdown-color: #a8a9b4; /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #ffffff; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --nav-color: #a8a9b4;
+  --nav-hover-color: #ffffff;
+  --nav-mobile-background-color: #040b14;
+  --nav-dropdown-background-color: #040b14;
+  --nav-dropdown-color: #a8a9b4;
+  --nav-dropdown-hover-color: #ffffff;
 }
 
-/* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
-
+/* Color Presets */
 .light-background {
   --background-color: #f4fafd;
   --surface-color: #ffffff;
@@ -89,124 +86,232 @@ h6 {
   font-family: var(--heading-font);
 }
 
-
-
-
-
-
-/* ===============================
-   General Reset & Base
-================================*/
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  background: #111;
-  color: #fff;
-  line-height: 1.6;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #a395e0;
-}
-
-/* ===============================
-   Header / Sidebar
-================================*/
+/*--------------------------------------------------------------
+# Global Header
+--------------------------------------------------------------*/
 .header {
-  width: 260px;
-  background: #1a1a1a;
-  padding: 20px;
+  color: var(--default-color);
+  background-color: var(--background-color);
   position: fixed;
   top: 0;
-  bottom: 0;
   left: 0;
-  z-index: 1000;
+  bottom: 0;
+  padding: 0 15px;
+  width: 300px;
+  transition: all ease-in-out 0.3s;
   overflow-y: auto;
-  transition: transform 0.3s ease-in-out;
-}
-
-.header .profile-img {
-  text-align: center;
-  margin-bottom: 15px;
+  z-index: 997;
+  border-right: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
 }
 
 .header .profile-img img {
+  margin: 15px auto;
+  display: block;
   width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border: 4px solid #a395e0;
+  border: 8px solid color-mix(in srgb, var(--default-color), transparent 85%);
 }
 
-.header .sitename {
-  font-size: 20px;
-  text-align: center;
-  margin: 10px 0;
-  font-weight: 600;
+.header .logo {
+  line-height: 1;
+  margin-bottom: 15px;
 }
 
-.header .sitename img.logo-inline {
-  height: 30px;
+.header .logo img {
+  max-height: 32px;
   margin-right: 8px;
+}
+
+.header .logo h1 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--heading-color);
 }
 
 .header .social-links {
-  margin: 15px 0;
+  margin: 0 0 20px 0;
 }
 
 .header .social-links a {
-  font-size: 20px;
-  display: inline-block;
-  margin: 0 6px;
-  color: #bbb;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--default-color), transparent 90%);
+  color: var(--default-color);
+  margin: 0 2px;
+  border-radius: 50%;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  transition: 0.3s;
 }
 
 .header .social-links a:hover {
-  color: #a395e0;
+  color: var(--contrast-color);
+  background: var(--accent-color);
 }
 
-/* ===============================
-   Nav Menu
-================================*/
-.navmenu ul {
-  list-style: none;
-  padding: 0;
+@media (min-width: 1200px) {
+  .header~main,
+  .header~#footer {
+    margin-left: 300px;
+  }
 }
 
-.navmenu li {
-  margin: 15px 0;
+@media (max-width: 1199px) {
+  .header {
+    left: -100%;
+  }
 }
 
-.navmenu a {
+.header.header-show {
+  left: 0;
+}
+
+.header .header-toggle {
+  color: var(--contrast-color);
+  background-color: var(--accent-color);
+  font-size: 22px;
   display: flex;
   align-items: center;
-  font-size: 15px;
-  color: #bbb;
-  padding: 8px 10px;
-  border-radius: 8px;
-  transition: background 0.3s ease, color 0.3s ease;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 9999;
+  transition: background-color 0.3s;
 }
 
-.navmenu a .navicon {
-  margin-right: 8px;
-  font-size: 18px;
+.header .header-toggle:hover {
+  color: var(--contrast-color);
+  background-color: color-mix(in srgb, var(--accent-color) 90%, white 15%);
+}
+
+/*--------------------------------------------------------------
+# Navigation Menu
+--------------------------------------------------------------*/
+.mobile-nav-toggle {
+  display: none;
+}
+
+.navmenu {
+  padding: 0;
+  z-index: 9997;
+}
+
+.navmenu ul {
+  list-style: none;
+  padding: 0 0 20px 0;
+  margin: 0;
+  text-align: center;
+}
+
+.navmenu a,
+.navmenu a:focus {
+  color: var(--nav-color);
+  padding: 15px 10px;
+  font-family: var(--nav-font);
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.navmenu a .navicon,
+.navmenu a:focus .navicon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.navmenu a .toggle-dropdown,
+.navmenu a:focus .toggle-dropdown {
+  font-size: 12px;
+  line-height: 0;
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: 0.3s;
+  flex-shrink: 0;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+}
+
+.navmenu a .toggle-dropdown:hover,
+.navmenu a:focus .toggle-dropdown:hover {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
 }
 
 .navmenu a:hover,
-.navmenu a.active {
-  background: #a395e0;
-  color: #111;
-  font-weight: 600;
+.navmenu .active,
+.navmenu .active:focus {
+  color: var(--nav-hover-color);
+}
+
+.navmenu a:hover .navicon,
+.navmenu .active .navicon,
+.navmenu .active:focus .navicon {
+  color: var(--accent-color);
+}
+
+.navmenu .active .toggle-dropdown,
+.navmenu .active:focus .toggle-dropdown {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+  transform: rotate(180deg);
+}
+
+.navmenu .dropdown {
+  display: block;
+}
+
+.navmenu .dropdown a,
+.navmenu .dropdown a:focus {
+  color: --nav-dropdown-color;
+}
+
+.navmenu .dropdown a:hover,
+.navmenu .dropdown .active,
+.navmenu .dropdown .active:focus {
+  color: var(--nav-dropdown-hover-color);
+}
+
+.navmenu .dropdown ul {
+  position: static;
+  display: none;
+  z-index: 99;
+  padding: 5px 10px;
+  margin: 5px 10px;
+  background-color: var(--nav-dropdown-background-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  box-shadow: none;
+  transition: all 0.5s ease-in-out;
+}
+
+.navmenu .dropdown ul ul {
+  background-color: rgba(33, 37, 41, 0.1);
+}
+
+.navmenu .dropdown>.dropdown-active {
+  display: block;
+  background-color: rgba(33, 37, 41, 0.03);
+}
+
+.logo-inline {
+  height: 24px;
+  vertical-align: middle;
+  margin: 0 5px;
 }
 
 /* ===============================
@@ -226,64 +331,62 @@ a:hover {
 }
 
 body {
-      font-family: Arial, sans-serif;
-      background: #070808;
-      color: #333;
-      padding: 20px;
-    }
+  font-family: Arial, sans-serif;
+  background: #070808;
+  color: #333;
+  padding: 20px;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      color: #a395e0;
-    }
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #a395e0;
+}
 
-    .library {
+.library {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   align-items: start;
-  width: calc(100% - 250px); /* adjust to your sidebar width */
-  margin-left: 250px;        /* push content away from sidebar */
+  margin-left: 300px;
   padding: 20px;
   box-sizing: border-box;
 }
 
+.doc-card {
+  background: rgba(14, 14, 14, 0.653);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s;
+}
 
-    .doc-card {
-      background: rgba(14, 14, 14, 0.653);
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      text-align: center;
-      transition: transform 0.2s;
-    }
+.doc-card:hover {
+  transform: translateY(-5px);
+}
 
-    .doc-card:hover {
-      transform: translateY(-5px);
-    }
+.doc-card h3 {
+  margin: 10px 0;
+  font-size: 18px;
+}
 
-    .doc-card h3 {
-      margin: 10px 0;
-      font-size: 18px;
-    }
+.doc-card a {
+  display: inline-block;
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+}
 
-    .doc-card a {
-      display: inline-block;
-      margin: 5px;
-      padding: 8px 12px;
-      border-radius: 5px;
-      text-decoration: none;
-      color: white;
-    }
+.view-btn {
+  background: #007bff;
+}
 
-    .view-btn {
-      background: #007bff;
-    }
-
-    .download-btn {
-      background: #28a745;
-    }
+.download-btn {
+  background: #28a745;
+}
 
 /*--------------------------------------------------------------
 # Global Footer
@@ -295,7 +398,7 @@ body {
   padding: 40px 0;
   position: relative;
   border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
-  
+  margin-left: 50%;
 }
 
 .footer .copyright p {
@@ -311,20 +414,18 @@ body {
 html, body {
   height: 100%;
   margin: 0;
+  width: 100%;
+}
+
+body {
   display: flex;
   flex-direction: column;
 }
 
-main {
-  flex: 1; /* Pushes footer down */
-}
-
 .footer {
-  margin-top: auto; /* Stick to bottom */
+  margin-top: auto;
+  width: 100%;
 }
-
-
-
 
 /*--------------------------------------------------------------
 # Preloader
@@ -355,7 +456,6 @@ main {
   0% {
     transform: rotate(0deg);
   }
-
   100% {
     transform: rotate(360deg);
   }
@@ -404,23 +504,126 @@ main {
   }
 }
 
+/*--------------------------------------------------------------
+# Global Page Titles & Breadcrumbs
+--------------------------------------------------------------*/
+.page-title {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding: 25px 0;
+  position: relative;
+}
+
+.page-title h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.page-title .breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.page-title .breadcrumbs ol li+li {
+  padding-left: 10px;
+}
+
+.page-title .breadcrumbs ol li+li::before {
+  content: "/";
+  display: inline-block;
+  padding-right: 10px;
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
+}
+
+/*--------------------------------------------------------------
+# Responsive Tweaks
+--------------------------------------------------------------*/
+@media (max-width: 1199px) {
+  .library {
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  .footer {
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    width: 260px;
+  }
+
+  .header-toggle {
+    display: block;
+  }
+
+  .library {
+    grid-template-columns: 1fr;
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .doc-card {
+    font-size: 14px;
+  }
+
+  .footer {
+    font-size: 13px;
+    padding: 20px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    width: 220px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  .doc-card h3 {
+    font-size: 16px;
+  }
+
+  .doc-card a {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .footer {
+    font-size: 12px;
+  }
+}
 
 
+/* Mobile Sidebar Toggle */
+.header-toggle {
+  font-size: 28px;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: none;
+  z-index: 10000;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@media (max-width: 1199px) {
+  .header-toggle {
+    display: block;
+  }
+}
 
 
 

@@ -199,7 +199,7 @@
             top: section.offsetTop - parseInt(scrollMarginTop),
             behavior: 'smooth'
           });
-        }, 100);
+        }, 100); 
       }
     }
   });
